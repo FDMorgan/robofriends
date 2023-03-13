@@ -1,29 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import SearchBox from '../components/SearchBox'
 import CardList from "../components/CardList";
 import Scroll from '../components/Scroll'
 import ErrorBoundry from '../components/ErrorBoundry'
 import './App.css'
-
+import { setSearchField, requestRobots } from '../actions'
+import { useSelector, useDispatch } from "react-redux";
 
 function App() {
 
-    const [robots, setRobots] = useState([])
-    const [searchfield, setSearchfield] = useState('')
+    const dispatch = useDispatch()
+
+    const robots = useSelector((state) => state.requestRobots.robots)
+    const isPending = useSelector((state) => state.requestRobots.isPending)
+    const searchField = useSelector((state) => state.searchRobots.searchField)
+    const onSearchChange = (event) => {
+        dispatch(setSearchField(event.target.value))
+    }
 
     useEffect(() => {
-        fetch('https://jsonplaceholder.typicode.com/users')
-        .then(response => response.json())
-        .then(users => {setRobots(users)})
+        dispatch(requestRobots())
     },[])
 
-    const onSearchChange = (event) => {
-        setSearchfield(event.target.value)
-    }
         const filteredRobtos = robots.filter(robot => {
-            return robot.name.toLowerCase().includes(searchfield.toLowerCase())
+            return robot.name.toLowerCase().includes(searchField.toLowerCase())
         })
-            return !robots.length ?
+            return isPending ?
             <h1 className='tc'>Loading</h1> :
             (
                 <div className='tc'>
