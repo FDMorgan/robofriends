@@ -8,6 +8,7 @@ import reportWebVitals from './reportWebVitals';
 import 'tachyons';
 import { searchRobots, requestRobots } from './reducers';
 import thunkMiddleware from 'redux-thunk';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 const rootReducer = combineReducers({ searchRobots, requestRobots })
 const store = createStore(rootReducer, applyMiddleware(thunkMiddleware))
@@ -25,3 +26,5 @@ root.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+
+serviceWorkerRegistration.register();
